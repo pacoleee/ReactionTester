@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<style>
+		body
+		{
+			font-family: "Comic Sans MS", cursive, sans-serif;
+		}
+		
+		#reactionTime
+		{
+			font-weight: bold;
+		}
+		
+		#box
+		{
+			width: 200px;
+			height: 200px;
+			display: none;
+			position: relative;
+		}
+	</style>
+	
+	<title>Reaction Tester</title>
+</head>
+
+<body>
+	<h1>Test Your Reaction!</h1>
+	<p>Click on the boxes and circles as quickly as you can!
+	<p><span id = "reactionTime">Your time: <span id="time">0</span>s</span></p>
+	
+	<div id="box"></div>
+	
+	<script type ="text/javascript">
+		
+		var SQUARE = 0; 
+		var CIRCLE = 1;
+		var MAX_TIME = 3000; //maximum time for a shape to appear at the start or after a click
+		var MAX_TOP = 300; //maximum height the shape will appear on the screen
+		var MAX_LEFT = 500; //maximum width the shape will appear on the screen
+		var clickedTime; //the time the shape was clicked
+		var createdTime; //the time the shape was created
+		var reactionTime; //the time it took the user to react to the shape appearing and clicking
+		
+		//create a box at the start
+		makeBox();
+		
+		document.getElementById("box").onclick = function() 
+		{
+			//calculate the reaction time when box was clicked
+			clickedTime = Date.now();
+			reactionTime = (clickedTime - createdTime) / 1000;
+			//make box disappear after the box was clicked
+			this.style.display = "none";
+			//display the reaction time
+			document.getElementById("time").innerHTML = reactionTime;
+			//make another box
+			makeBox();
+		}
+		
+		//Makes a box
+		function makeBox() 
+		{	
+			changeColor();
+			changeShape();
+			changePosition();
+			//determines the time a shape will appear at the start or when the user has clicked on a shape
+			var time = Math.random() * MAX_TIME;	
+			//make the box appear after a set amount of time
+			setTimeout(function() 
+			{
+				document.getElementById("box").style.display = "block";
+				//store the time it was created
+				createdTime = Date.now();
+			}, time); 
+		} 
+		
+		//get a random color
+		function changeColor() 
+		{
+		     var randColor = "#" +Math.floor(Math.random()*16777215).toString(16);
+			 document.getElementById("box").style.background = randColor;
+		}
+		
+		//get a random shape
+		function changeShape()
+		{
+			var shape = Math.round(Math.random());
+			if(shape == SQUARE)
+				document.getElementById("box").style.borderRadius = "0px";
+			else if(shape == CIRCLE)
+				document.getElementById("box").style.borderRadius = "100px";
+		}
+		
+		//get a random position on the screen
+		function changePosition()
+		{
+			var boxTop = (Math.random() * MAX_TOP) +"px";
+			var boxLeft = (Math.random() * MAX_LEFT) +"px";
+			document.getElementById("box").style.top = boxTop;
+			document.getElementById("box").style.left = boxLeft;
+		}	
+	</script>
+</body>
+
+</html>
